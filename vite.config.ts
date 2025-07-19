@@ -1,28 +1,30 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/template/', // Configuration pour GitHub Pages
   build: {
-    target: 'esnext',
-    minify: 'esbuild',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    minify: 'terser',
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          animations: ['framer-motion'],
-          utils: ['axe-core'],
-        },
-      },
-    },
+          animations: ['framer-motion']
+        }
+      }
+    }
   },
   server: {
     port: 5173,
-    host: true,
+    host: true
   },
   preview: {
     port: 4173,
-    host: true,
-  },
+    host: true
+  }
 })

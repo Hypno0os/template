@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Animal {
+  id             String          @id @default(cuid())
+  name           String
+  species        String
+  description    String
+  imageUrl       String?
+  soundUrl       String?
+  behaviors      Behavior[]
+  communications Communication[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@map("animals")
+}
+
+model Behavior {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  animalId    String
+  animal      Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("behaviors")
+}
+
+model Communication {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  animalId    String?
+  animal      Animal?  @relation(fields: [animalId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("communications")
+}
